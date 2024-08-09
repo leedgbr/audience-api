@@ -15,14 +15,20 @@ spring:
       probability: 1.0
 server:
   max-http-request-header-size: 16KB
+info:
+  app:
+    details: "this is really useful detail"
 management:
   tracing:
     sampling:
       probability: 1.0
+  info:
+    env:
+      enabled: true
   endpoints:
     web:
       exposure:
-        include: '*' #TODO enable only info and health for security purposes. Consider that we may want to still access other actuator endpoints securely.
+        include: '*'
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"

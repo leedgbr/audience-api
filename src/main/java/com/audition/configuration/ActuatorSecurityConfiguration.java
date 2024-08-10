@@ -13,7 +13,7 @@ public class ActuatorSecurityConfiguration {
         http
             .authorizeHttpRequests((authz) -> authz
                 .requestMatchers("/actuator/health", "/actuator/info").permitAll()
-                .requestMatchers("/posts", "/post/*").permitAll()
+                .requestMatchers("/posts", "/posts/*").permitAll()
                 .requestMatchers("/**").authenticated()
                 .and()
             );

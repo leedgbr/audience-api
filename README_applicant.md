@@ -90,9 +90,14 @@ Sample response
   These constraints may be that the source system is inaccessible to the expected clients of the Audition API, or maybe
   that the source system cannot be modified yet there is a need for additional functionality around accessing Audition
   Posts.
+* The Audition source system contract states that it will respond with http status 200 for success. We don't expect it
+  to return 201, or any other 2xx success statuses.
+* There is no specific requirement to expose details about system errors to clients.
 
 ## Notes
 
 * If time allows, create an openapi spec definition to describe the Audience API contract. This serves as useful
   documentation for integrating engineers and also allows for the possibility of generating a client library in various
   languages.
+* Exception handling has been refactored to reduce / remove the risk of exposing internal details of the system. This
+  may or may not be controversial. Details of errors that the caller can remediate are still exposed. Happy to discuss.

@@ -4,6 +4,8 @@ spring:
   autoconfigure:
     exclude:
       - org.springframework.boot.autoconfigure.jdbc.DataSourceAutoConfiguration
+audition-source-url: http://audience-post-source-system
+application:
   connection:
     read-timeout: 5000
     write-timeout: 5000

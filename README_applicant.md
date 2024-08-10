@@ -101,3 +101,7 @@ Sample response
   languages.
 * Exception handling has been refactored to reduce / remove the risk of exposing internal details of the system. This
   may or may not be controversial. Details of errors that the caller can remediate are still exposed. Happy to discuss.
+* I have kept exception handling light. Could decide on error wrapping strategy if deemed worthwhile.
+* Have not had time, but consider separating highest level tests (i.e. ActuatorEndpointTests and
+  AuditionApplicationTests) into their own gradle test target and exclude them from the default unit test run. This will
+  help provide more accurate granular unit test coverage data and improve granular unit test cycle times.

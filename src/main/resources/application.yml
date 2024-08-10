@@ -32,6 +32,8 @@ management:
 logging:
   pattern:
     level: "%5p [${spring.application.name:},%X{traceId:-},%X{spanId:-}]"
+
+audition-source-url: "https://jsonplaceholder.typicode.com"
 httpclient:
   connection-request-timeout-in-millis: 1000
   connect-timeout-in-millis: 1000

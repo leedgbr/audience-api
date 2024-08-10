@@ -14,6 +14,9 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 @Configuration
 public class HttpClientConfiguration {
 
+    @Value("${audition-source-url}")
+    public String auditionSourceUrl;
+
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
         return new HttpComponentsClientHttpRequestFactory(httpClient);

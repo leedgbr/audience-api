@@ -5,6 +5,8 @@ import com.audition.common.exception.SystemException;
 import com.audition.model.AuditionPost;
 import java.util.Arrays;
 import java.util.List;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -18,9 +20,11 @@ public class AuditionIntegrationClient {
 
     private final RestTemplate restTemplate;
 
-    AuditionIntegrationClient(RestTemplateBuilder builder, ClientHttpRequestFactory clientHttpRequestFactory) {
+    @Autowired
+    AuditionIntegrationClient(RestTemplateBuilder builder, ClientHttpRequestFactory clientHttpRequestFactory,
+        @Value("#{httpClientConfiguration.auditionSourceUrl}") String auditionSourceUrl) {
         restTemplate = builder
-            .rootUri("https://jsonplaceholder.typicode.com")
+            .rootUri(auditionSourceUrl)
             .requestFactory(() -> clientHttpRequestFactory)
             .build();
     }

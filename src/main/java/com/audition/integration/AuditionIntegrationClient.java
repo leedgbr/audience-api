@@ -24,8 +24,7 @@ public class AuditionIntegrationClient {
         ResponseEntity<AuditionPost[]> response = handle2xx(restTemplate.getForEntity("/posts", AuditionPost[].class));
         AuditionPost[] body = response.getBody();
         if (body == null) {
-            throw new SystemException("Missing list content when fetching posts", "No Body Content",
-                response.getStatusCode().value());
+            throw new SystemException("Missing list content when fetching posts", response.getStatusCode().value());
         }
         return Arrays.asList(body);
     }
@@ -46,7 +45,7 @@ public class AuditionIntegrationClient {
     private AuditionPost getBody(ResponseEntity<AuditionPost> response, String id) {
         AuditionPost post = response.getBody();
         if (post == null) {
-            throw new SystemException(String.format("Missing content for Post with id '%s'", id), "No Body Content",
+            throw new SystemException(String.format("Missing content for Post with id '%s'", id),
                 response.getStatusCode().value());
         }
         return post;
@@ -55,7 +54,7 @@ public class AuditionIntegrationClient {
     private <T> ResponseEntity<T> handle2xx(ResponseEntity<T> response) {
         // we need to make sure we don't accept any 2xx responses other than 200 as we don't expect to receive those.
         if (HttpStatus.OK != response.getStatusCode()) {
-            throw new SystemException("Non http 200 success when fetching posts", "Unexpected Success",
+            throw new SystemException("Non http 200 success when fetching posts",
                 response.getStatusCode().value());
         }
         return response;

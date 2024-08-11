@@ -100,8 +100,12 @@ Sample response
   documentation for integrating engineers and also allows for the possibility of generating a client library in various
   languages.
 * Exception handling has been refactored to reduce / remove the risk of exposing internal details of the system. This
-  may or may not be controversial. Details of errors that the caller can remediate are still exposed. Happy to discuss.
-* I have kept exception handling light. Could decide on error wrapping strategy if deemed worthwhile.
-* Have not had time, but consider separating highest level tests (i.e. ActuatorEndpointTests and
-  AuditionApplicationTests) into their own gradle test target and exclude them from the default unit test run. This will
-  help provide more accurate granular unit test coverage data and improve granular unit test cycle times.
+  may or may not be controversial - or against expected requirements. Details of errors that the caller can remediate
+  (i.e. business errors or those due to a malformed request) are exposed in the api response. Errors the client is not
+  able to remediate result in a standard api response message that exposes no system details. Only those errors the
+  client is able to remediate are logged. Happy to discuss this approach if it is at odds with what is expected.
+* I have kept exception handling light for now. Could decide on error wrapping strategy, perhaps at certain layers, if
+  deemed worthwhile.
+* Have not had time, but consider separating the highest level tests (i.e. `ActuatorEndpointTests` and
+  `AuditionApplicationTests`) into their own gradle test target and exclude them from the default unit test run. This
+  will help provide more accurate granular unit test coverage data and improve granular unit test cycle times.

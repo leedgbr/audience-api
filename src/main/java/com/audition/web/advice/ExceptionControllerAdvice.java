@@ -39,13 +39,13 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         // If it's not a specific business error, just log it and return default system error response.  We will see
         // it in the logs and deal with it appropriately at the time if it is a case we have not yet covered.
         logger.logErrorWithException(LOG, "A system error occurred: " + e, e);
-        return createProblemDetail(MESSAGE_DEFAULT, HttpStatus.INTERNAL_SERVER_ERROR);
+        return createProblemDetail();
     }
 
-    private ProblemDetail createProblemDetail(String message, HttpStatus status) {
-        final ProblemDetail problemDetail = ProblemDetail.forStatus(status);
-        problemDetail.setDetail(message);
+    private ProblemDetail createProblemDetail() {
+        final ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.INTERNAL_SERVER_ERROR);
         problemDetail.setTitle(TITLE_DEFAULT);
+        problemDetail.setDetail(MESSAGE_DEFAULT);
         return problemDetail;
     }
 
@@ -53,8 +53,8 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         // Use 400 if that is what the corporate standards dictate, but 422 allows for differentiation between
         // malformed requests vs business rule violations.  This can help with observability.
         final ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
-        problemDetail.setDetail(e.getDetail());
         problemDetail.setTitle(e.getTitle());
+        problemDetail.setDetail(e.getDetail());
         return problemDetail;
     }
 }

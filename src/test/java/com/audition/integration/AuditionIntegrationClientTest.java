@@ -91,8 +91,7 @@ class AuditionIntegrationClientTest {
         SystemException exception = assertThrows(
             SystemException.class, () -> client.getPosts()
         );
-        assertEquals("Unexpected Success", exception.getTitle());
-        assertEquals("Non http 200 success when fetching posts", exception.getDetail());
+        assertEquals("Non http 200 success when fetching posts", exception.getMessage());
         assertEquals(202, exception.getStatusCode());
     }
 
@@ -143,9 +142,21 @@ class AuditionIntegrationClientTest {
         SystemException exception = assertThrows(
             SystemException.class, () -> client.getPostById("123")
         );
-        assertEquals("Unexpected Success", exception.getTitle());
-        assertEquals("Non http 200 success when fetching posts", exception.getDetail());
+        assertEquals("Non http 200 success when fetching posts", exception.getMessage());
         assertEquals(202, exception.getStatusCode());
+    }
+
+    @Test
+    public void getPostByIdHttpClientErrorResponse() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.FORBIDDEN));
+
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostById("123")
+        );
+        assertEquals("Unexpected error fetching post by id", exception.getMessage());
+        assertEquals("403 Forbidden: [no body]", exception.getCause().getMessage());
     }
 
     @Test
@@ -159,5 +170,6 @@ class AuditionIntegrationClientTest {
         );
         assertEquals("500 Internal Server Error: [no body]", exception.getMessage());
     }
+
 }
 

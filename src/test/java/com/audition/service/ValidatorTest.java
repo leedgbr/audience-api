@@ -15,15 +15,15 @@ class ValidatorTest {
     public Validator validator;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         this.validator = new Validator();
     }
 
     @ParameterizedTest
     @NullAndEmptySource
     @ValueSource(strings = {"     "})
-    void mandatoryPostId(String postId) {
-        BusinessException exception = assertThrows(
+    void mandatoryPostId(final String postId) {
+        final BusinessException exception = assertThrows(
             BusinessException.class, () -> validator.validate(postId)
         );
         assertEquals("Validation", exception.getTitle());
@@ -33,8 +33,8 @@ class ValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"A", "ABC", "!", "@", "#", "$", "%", "^", "&", "*", "(", ")", "-", "+"})
-    void numericPostId(String postId) {
-        BusinessException exception = assertThrows(
+    void numericPostId(final String postId) {
+        final BusinessException exception = assertThrows(
             BusinessException.class, () -> validator.validate(postId)
         );
         assertEquals("Validation", exception.getTitle());
@@ -44,7 +44,7 @@ class ValidatorTest {
 
     @ParameterizedTest
     @ValueSource(strings = {"1", "12345", "99999999999999999999999999999999999999999999"})
-    void validPostId(String postId) {
+    void validPostId(final String postId) {
         assertDoesNotThrow(() -> validator.validate(postId));
     }
 }

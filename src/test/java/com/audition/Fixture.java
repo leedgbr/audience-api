@@ -14,15 +14,15 @@ import org.springframework.util.FileCopyUtils;
 
 public class Fixture {
 
-    public static String readFile(String path) {
-        ResourceLoader resourceLoader = new DefaultResourceLoader();
-        Resource resource = resourceLoader.getResource(path);
+    public static String readFile(final String path) {
+        final ResourceLoader resourceLoader = new DefaultResourceLoader();
+        final Resource resource = resourceLoader.getResource(path);
         return ResourceReader.asString(resource);
     }
 
     static class ResourceReader {
 
-        public static String asString(Resource resource) {
+        public static String asString(final Resource resource) {
             try (Reader reader = new InputStreamReader(resource.getInputStream(), UTF_8)) {
                 return FileCopyUtils.copyToString(reader);
             } catch (IOException e) {

@@ -16,23 +16,23 @@ public class BusinessException extends RuntimeException {
     private String field;
     private String detail;
 
-    public static BusinessException newValidationError(String detail) {
-        BusinessException e = new BusinessException();
+    public static BusinessException newValidationError(final String detail) {
+        final BusinessException e = new BusinessException();
         e.title = TITLE_VALIDATION;
         e.detail = detail;
         return e;
     }
 
-    public static BusinessException newValidationError(String field, String detail) {
-        BusinessException e = new BusinessException();
+    public static BusinessException newValidationError(final String field, final String detail) {
+        final BusinessException e = new BusinessException();
         e.title = TITLE_VALIDATION;
         e.field = field;
         e.detail = detail;
         return e;
     }
 
-    public static BusinessException newResourceNotFound(String detail) {
-        BusinessException e = new BusinessException();
+    public static BusinessException newResourceNotFound(final String detail) {
+        final BusinessException e = new BusinessException();
         e.title = TITLE_RESOURCE_NOT_FOUND;
         e.detail = detail;
         return e;

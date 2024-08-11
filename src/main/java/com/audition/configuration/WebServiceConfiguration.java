@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.fasterxml.jackson.databind.PropertyNamingStrategies;
 import java.text.SimpleDateFormat;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import org.apache.hc.client5.http.classic.HttpClient;
 import org.apache.hc.client5.http.config.RequestConfig;
@@ -37,12 +38,13 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
         return new ObjectMapper()
             .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
             .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
-            .setDateFormat(new SimpleDateFormat(YEAR_MONTH_DAY_PATTERN))
+            .setDateFormat(new SimpleDateFormat(YEAR_MONTH_DAY_PATTERN, Locale.getDefault()))
             .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     @Bean
-    public RestTemplate restTemplate(RestTemplateBuilder builder, ClientHttpRequestFactory clientHttpRequestFactory) {
+    public RestTemplate restTemplate(final RestTemplateBuilder builder,
+        final ClientHttpRequestFactory clientHttpRequestFactory) {
         return builder
             .requestFactory(() -> clientHttpRequestFactory)
             .build();
@@ -50,14 +52,14 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
     }
 
     @Bean
-    public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
+    public ClientHttpRequestFactory clientHttpRequestFactory(final HttpClient httpClient) {
         return new BufferingClientHttpRequestFactory(
             new HttpComponentsClientHttpRequestFactory(httpClient));
     }
 
     @Bean
-    public HttpClient httpClient(RequestConfig requestConfig,
-        PoolingHttpClientConnectionManager poolingHttpClientConnectionManager) {
+    public HttpClient httpClient(final RequestConfig requestConfig,
+        final PoolingHttpClientConnectionManager poolingHttpClientConnectionManager) {
         return HttpClientBuilder.create()
             .setConnectionManager(poolingHttpClientConnectionManager)
             .setDefaultRequestConfig(requestConfig)
@@ -66,9 +68,9 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
 
     @Bean
     public RequestConfig requestConfig(
-        @Value("${httpclient.connection-request-timeout-in-millis}") int connectionRequestTimeout,
-        @Value("${httpclient.connect-timeout-in-millis}") int connectTimeout,
-        @Value("${httpclient.response-timeout-in-millis}") int responseTimeout) {
+        @Value("${httpclient.connection-request-timeout-in-millis}") final int connectionRequestTimeout,
+        @Value("${httpclient.connect-timeout-in-millis}") final int connectTimeout,
+        @Value("${httpclient.response-timeout-in-millis}") final int responseTimeout) {
         return RequestConfig.custom()
             .setConnectionRequestTimeout(connectionRequestTimeout, TimeUnit.MILLISECONDS)
             .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
@@ -78,9 +80,9 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
 
     @Bean
     public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager(
-        @Value("${httpclient.connection-pool.max-total}") int maxTotal,
-        @Value("${httpclient.connection-pool.default-max-per-route}") int defaultMaxPerRoute) {
-        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        @Value("${httpclient.connection-pool.max-total}") final int maxTotal,
+        @Value("${httpclient.connection-pool.default-max-per-route}") final int defaultMaxPerRoute) {
+        final PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
         connectionManager.setMaxTotal(maxTotal);
         connectionManager.setDefaultMaxPerRoute(defaultMaxPerRoute);
         return connectionManager;

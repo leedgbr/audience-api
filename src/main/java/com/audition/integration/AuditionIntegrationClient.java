@@ -25,26 +25,29 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
     @Value("${audition-source-url}")
     private URL baseUrl;
 
-    public List<AuditionPost> getPosts(String userId) {
-        ResponseEntity<AuditionPost[]> response = handle2xx(
+    @Override
+    public List<AuditionPost> getPosts(final String userId) {
+        final ResponseEntity<AuditionPost[]> response = handle2xx(
             restTemplate.getForEntity(getPostUrl(userId), AuditionPost[].class));
-        AuditionPost[] body = response.getBody();
+        final AuditionPost[] body = response.getBody();
         if (body == null) {
             throw new SystemException("Missing list content when fetching posts", response.getStatusCode().value());
         }
         return Arrays.asList(body);
     }
 
+    @Override
     public AuditionPost getPost(final String id) {
-        AuditionPost post = getPostOnly(id);
-        List<Comment> comments = getComments(id);
+        final AuditionPost post = getPostOnly(id);
+        final List<Comment> comments = getComments(id);
         post.setComments(comments);
         return post;
     }
 
-    public List<Comment> getComments(String postId) {
+    @Override
+    public List<Comment> getComments(final String postId) {
         try {
-            ResponseEntity<Comment[]> response = handle2xx(
+            final ResponseEntity<Comment[]> response = handle2xx(
                 restTemplate.getForEntity(String.format("%s/posts/%s/comments", baseUrl, postId), Comment[].class));
             return getCommentsBody(response, postId);
         } catch (final HttpClientErrorException e) {
@@ -58,7 +61,7 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
 
     private AuditionPost getPostOnly(final String id) {
         try {
-            ResponseEntity<AuditionPost> response = handle2xx(
+            final ResponseEntity<AuditionPost> response = handle2xx(
                 restTemplate.getForEntity(String.format("%s/posts/%s", baseUrl, id), AuditionPost.class));
             return getPostBody(response, id);
         } catch (final HttpClientErrorException e) {
@@ -69,8 +72,8 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         }
     }
 
-    private AuditionPost getPostBody(ResponseEntity<AuditionPost> response, String id) {
-        AuditionPost post = response.getBody();
+    private AuditionPost getPostBody(final ResponseEntity<AuditionPost> response, final String id) {
+        final AuditionPost post = response.getBody();
         if (post == null) {
             throw new SystemException(String.format("Missing content for Post with id '%s'", id),
                 response.getStatusCode().value());
@@ -78,8 +81,8 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         return post;
     }
 
-    private List<Comment> getCommentsBody(ResponseEntity<Comment[]> response, String postId) {
-        Comment[] comments = response.getBody();
+    private List<Comment> getCommentsBody(final ResponseEntity<Comment[]> response, final String postId) {
+        final Comment[] comments = response.getBody();
         if (comments == null) {
             throw new SystemException(String.format("Missing content for Comments for Post with id '%s'", postId),
                 response.getStatusCode().value());
@@ -87,7 +90,7 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         return Arrays.asList(comments);
     }
 
-    private <T> ResponseEntity<T> handle2xx(ResponseEntity<T> response) {
+    private <T> ResponseEntity<T> handle2xx(final ResponseEntity<T> response) {
         // we need to make sure we don't accept any 2xx responses other than 200 as we don't expect to receive those.
         if (HttpStatus.OK != response.getStatusCode()) {
             throw new SystemException("Non http 200 success when fetching posts",
@@ -96,8 +99,8 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         return response;
     }
 
-    private String getPostUrl(String userId) {
-        StringBuilder builder = new StringBuilder();
+    private String getPostUrl(final String userId) {
+        final StringBuilder builder = new StringBuilder();
         builder.append(String.format("%s/posts", baseUrl));
         if (!StringUtils.isBlank(userId)) {
             builder.append(String.format("?userId=%s", userId));

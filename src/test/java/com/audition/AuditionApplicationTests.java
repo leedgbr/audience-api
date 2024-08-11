@@ -39,13 +39,19 @@ class AuditionApplicationTests {
                 "id", 2,
                 "title", "qui est esse",
                 "body",
-                "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla"))))
+                "est rerum tempore vitae\n"
+                    + "sequi sint nihil reprehenderit dolor beatae ea dolores neque\n"
+                    + "fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\n"
+                    + "qui aperiam non debitis possimus qui neque nisi nulla"))))
             .andExpect(jsonPath("$", hasItem(Map.of(
                 "userId", 8,
                 "id", 71,
                 "title", "et iusto veniam et illum aut fuga",
                 "body",
-                "occaecati a doloribus\niste saepe consectetur placeat eum voluptate dolorem et\nqui quo quia voluptas\nrerum ut id enim velit est perferendis"))));
+                "occaecati a doloribus\n"
+                    + "iste saepe consectetur placeat eum voluptate dolorem et\n"
+                    + "qui quo quia voluptas\n"
+                    + "rerum ut id enim velit est perferendis"))));
     }
 
     @Test

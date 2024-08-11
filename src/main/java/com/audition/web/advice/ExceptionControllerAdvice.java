@@ -50,7 +50,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         return problemDetail;
     }
 
-    private ProblemDetail createProblemDetail(BusinessException e) {
+    private ProblemDetail createProblemDetail(final BusinessException e) {
         // Use 400 if that is what the corporate standards dictate, but 422 allows for differentiation between
         // malformed requests vs business rule violations.  This can help with observability.
         final ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);

@@ -15,33 +15,33 @@ class AuditionServiceTest {
     private AuditionService service;
 
     @BeforeEach
-    public void setUp() {
+    void setUp() {
         service = new AuditionService(new StubIntegrationClient(), new Validator());
     }
 
     @Test
-    public void posts() {
-        String userId = null;
-        List<AuditionPost> post = service.getPosts(userId);
+    void posts() {
+        final String userId = null;
+        final List<AuditionPost> post = service.getPosts(userId);
         assertEquals(PostFixture.getExpectedPosts(), post);
     }
 
     @Test
-    public void postsFilteredByUserId() {
-        String userId = "5";
-        List<AuditionPost> post = service.getPosts(userId);
+    void postsFilteredByUserId() {
+        final String userId = "5";
+        final List<AuditionPost> post = service.getPosts(userId);
         assertEquals(PostFixture.getExpectedPostsForUser(), post);
     }
 
     @Test
-    public void postById() {
-        AuditionPost post = service.getPostById("123");
+    void postById() {
+        final AuditionPost post = service.getPostById("123");
         assertEquals(PostFixture.getExpectedPost(), post);
     }
 
     @Test
-    public void postByIdValidationShouldBeWiredUp() {
-        BusinessException exception = assertThrows(
+    void postByIdValidationShouldBeWiredUp() {
+        final BusinessException exception = assertThrows(
             BusinessException.class, () -> service.getPostById("   ")
         );
         assertEquals("Validation", exception.getTitle());
@@ -50,14 +50,14 @@ class AuditionServiceTest {
     }
 
     @Test
-    public void commentsByPostId() {
-        List<Comment> comments = service.getComments("123");
+    void commentsByPostId() {
+        final List<Comment> comments = service.getComments("123");
         assertEquals(CommentFixture.getExpectedComments(), comments);
     }
 
     @Test
-    public void commentsByPostIdValidationShouldBeWiredUp() {
-        BusinessException exception = assertThrows(
+    void commentsByPostIdValidationShouldBeWiredUp() {
+        final BusinessException exception = assertThrows(
             BusinessException.class, () -> service.getComments("   ")
         );
         assertEquals("Validation", exception.getTitle());

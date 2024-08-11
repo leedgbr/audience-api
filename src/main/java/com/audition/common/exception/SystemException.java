@@ -20,6 +20,7 @@ public class SystemException extends RuntimeException {
         this.statusCode = errorCode;
     }
 
+    @Override
     public String toString() {
         return String.format("[message]= %s, [statusCode]= %s", this.getMessage(), this.getStatusCode());
     }

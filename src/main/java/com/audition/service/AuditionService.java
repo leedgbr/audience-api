@@ -14,21 +14,21 @@ public class AuditionService {
     private final Validator validator;
 
     @Autowired
-    public AuditionService(IAuditionIntegrationClient client, Validator validator) {
+    public AuditionService(final IAuditionIntegrationClient client, final Validator validator) {
         this.client = client;
         this.validator = validator;
     }
 
-    public List<AuditionPost> getPosts(String userId) {
+    public List<AuditionPost> getPosts(final String userId) {
         return client.getPosts(userId);
     }
 
-    public AuditionPost getPostById(String postId) {
+    public AuditionPost getPostById(final String postId) {
         validator.validate(postId);
         return client.getPost(postId);
     }
 
-    public List<Comment> getComments(String postId) {
+    public List<Comment> getComments(final String postId) {
         validator.validate(postId);
         return client.getComments(postId);
     }

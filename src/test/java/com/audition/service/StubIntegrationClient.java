@@ -9,15 +9,15 @@ import java.util.List;
 public class StubIntegrationClient implements IAuditionIntegrationClient {
 
     @Override
-    public List<AuditionPost> getPosts(String userId) {
+    public List<AuditionPost> getPosts(final String userId) {
         if ("5".equals(userId)) {
-            AuditionPost post1 = new AuditionPost();
+            final AuditionPost post1 = new AuditionPost();
             post1.setId(7);
             post1.setUserId(5);
             post1.setTitle("title7");
             post1.setBody("body7");
 
-            AuditionPost post2 = new AuditionPost();
+            final AuditionPost post2 = new AuditionPost();
             post2.setId(74);
             post2.setUserId(5);
             post2.setTitle("title74");
@@ -25,13 +25,13 @@ public class StubIntegrationClient implements IAuditionIntegrationClient {
 
             return Arrays.asList(post1, post2);
         }
-        AuditionPost post1 = new AuditionPost();
+        final AuditionPost post1 = new AuditionPost();
         post1.setId(1);
         post1.setUserId(1);
         post1.setTitle("title1");
         post1.setBody("body1");
 
-        AuditionPost post2 = new AuditionPost();
+        final AuditionPost post2 = new AuditionPost();
         post2.setId(2);
         post2.setUserId(1);
         post2.setTitle("title2");
@@ -41,9 +41,9 @@ public class StubIntegrationClient implements IAuditionIntegrationClient {
     }
 
     @Override
-    public AuditionPost getPost(String id) {
+    public AuditionPost getPost(final String id) {
         if ("123".equals(id)) {
-            AuditionPost post = new AuditionPost();
+            final AuditionPost post = new AuditionPost();
             post.setId(123);
             post.setUserId(1);
             post.setTitle("title123");
@@ -54,14 +54,14 @@ public class StubIntegrationClient implements IAuditionIntegrationClient {
     }
 
     @Override
-    public List<Comment> getComments(String postId) {
-        Comment comment1 = new Comment();
+    public List<Comment> getComments(final String postId) {
+        final Comment comment1 = new Comment();
         comment1.setId(1);
         comment1.setName("name1");
         comment1.setEmail("email1");
         comment1.setBody("body1");
 
-        Comment comment2 = new Comment();
+        final Comment comment2 = new Comment();
         comment2.setId(2);
         comment2.setName("name2");
         comment2.setEmail("email2");

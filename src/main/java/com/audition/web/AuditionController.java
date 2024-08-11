@@ -20,7 +20,7 @@ public class AuditionController {
     AuditionService auditionService;
 
     @RequestMapping(value = "/posts", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody List<AuditionPost> getPosts(@RequestParam(required = false) String userId) {
+    public @ResponseBody List<AuditionPost> getPosts(@RequestParam(required = false) final String userId) {
         return auditionService.getPosts(userId);
     }
 

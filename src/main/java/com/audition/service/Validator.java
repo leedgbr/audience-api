@@ -10,7 +10,7 @@ public class Validator {
     private static final String POST_ID_REQUIRED = "POST_ID_REQUIRED";
     private static final String POST_ID_MUST_BE_NUMERIC = "POST_ID_MUST_BE_NUMERIC";
 
-    public void validate(String postId) {
+    public void validate(final String postId) {
         if (postId == null || postId.isBlank()) {
             throw BusinessException.newValidationError("id", POST_ID_REQUIRED);
         }

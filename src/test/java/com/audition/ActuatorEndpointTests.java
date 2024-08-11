@@ -14,7 +14,7 @@ import org.springframework.test.web.servlet.MockMvc;
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.yml")
-public class ActuatorEndpointTests {
+class ActuatorEndpointTests {
 
     @Autowired
     private MockMvc mockMvc;

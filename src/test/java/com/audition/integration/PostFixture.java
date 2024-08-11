@@ -7,44 +7,53 @@ import java.util.List;
 public class PostFixture {
 
     static List<AuditionPost> getExpectedPosts() {
-        AuditionPost post1 = new AuditionPost();
+        final AuditionPost post1 = new AuditionPost();
         post1.setId(1);
         post1.setUserId(1);
         post1.setTitle("sunt aut facere repellat provident occaecati excepturi optio reprehenderit");
         post1.setBody(
-            "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto");
+            "quia et suscipit\n"
+                + "suscipit recusandae consequuntur expedita et cum\n"
+                + "reprehenderit molestiae ut ut quas totam\n"
+                + "nostrum rerum est autem sunt rem eveniet architecto");
 
-        AuditionPost post2 = new AuditionPost();
+        final AuditionPost post2 = new AuditionPost();
         post2.setId(2);
         post2.setUserId(1);
         post2.setTitle("qui est esse");
         post2.setBody(
-            "est rerum tempore vitae\nsequi sint nihil reprehenderit dolor beatae ea dolores neque\nfugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\nqui aperiam non debitis possimus qui neque nisi nulla");
+            "est rerum tempore vitae\n"
+                + "sequi sint nihil reprehenderit dolor beatae ea dolores neque\n"
+                + "fugiat blanditiis voluptate porro vel nihil molestiae ut reiciendis\n"
+                + "qui aperiam non debitis possimus qui neque nisi nulla");
 
-        AuditionPost post3 = new AuditionPost();
+        final AuditionPost post3 = new AuditionPost();
         post3.setId(3);
         post3.setUserId(1);
         post3.setTitle("ea molestias quasi exercitationem repellat qui ipsa sit aut");
         post3.setBody(
-            "et iusto sed quo iure\nvoluptatem occaecati omnis eligendi aut ad\nvoluptatem doloribus vel accusantium quis pariatur\nmolestiae porro eius odio et labore et velit aut");
+            "et iusto sed quo iure\n"
+                + "voluptatem occaecati omnis eligendi aut ad\n"
+                + "voluptatem doloribus vel accusantium quis pariatur\n"
+                + "molestiae porro eius odio et labore et velit aut");
 
         return Arrays.asList(post1, post2, post3);
     }
 
     static List<AuditionPost> getExpectedPostsForUser() {
-        AuditionPost post1 = new AuditionPost();
+        final AuditionPost post1 = new AuditionPost();
         post1.setId(11);
         post1.setUserId(8);
         post1.setTitle("title11");
         post1.setBody("body11");
 
-        AuditionPost post2 = new AuditionPost();
+        final AuditionPost post2 = new AuditionPost();
         post2.setId(12);
         post2.setUserId(8);
         post2.setTitle("title12");
         post2.setBody("body12");
 
-        AuditionPost post3 = new AuditionPost();
+        final AuditionPost post3 = new AuditionPost();
         post3.setId(13);
         post3.setUserId(8);
         post3.setTitle("title13");
@@ -54,12 +63,15 @@ public class PostFixture {
     }
 
     static AuditionPost getExpectedPostWithComments() {
-        AuditionPost post = new AuditionPost();
+        final AuditionPost post = new AuditionPost();
         post.setId(123);
         post.setUserId(1);
         post.setTitle("sunt aut facere repellat provident occaecati excepturi optio reprehenderit");
         post.setBody(
-            "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto");
+            "quia et suscipit\n"
+                + "suscipit recusandae consequuntur expedita et cum\n"
+                + "reprehenderit molestiae ut ut quas totam\n"
+                + "nostrum rerum est autem sunt rem eveniet architecto");
 
         post.setComments(CommentFixture.getExpectedComments());
         return post;

@@ -6,11 +6,11 @@ import lombok.Getter;
 @Getter
 public class BusinessException extends RuntimeException {
 
-    private static final String TITLE_VALIDATION = "Validation";
-    private static final String TITLE_RESOURCE_NOT_FOUND = "Resource Not Found";
-
     @Serial
     private static final long serialVersionUID = -2730228640925849139L;
+
+    private static final String TITLE_VALIDATION = "Validation";
+    private static final String TITLE_RESOURCE_NOT_FOUND = "Resource Not Found";
 
     private String title;
     private String detail;

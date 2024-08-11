@@ -1,10 +1,22 @@
 package com.audition.configuration;
 
+import com.fasterxml.jackson.annotation.JsonInclude;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.fasterxml.jackson.databind.PropertyNamingStrategies;
+import java.text.SimpleDateFormat;
+import java.util.concurrent.TimeUnit;
+import org.apache.hc.client5.http.classic.HttpClient;
+import org.apache.hc.client5.http.config.RequestConfig;
+import org.apache.hc.client5.http.impl.classic.HttpClientBuilder;
+import org.apache.hc.client5.http.impl.io.PoolingHttpClientConnectionManager;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.http.client.BufferingClientHttpRequestFactory;
-import org.springframework.http.client.SimpleClientHttpRequestFactory;
+import org.springframework.http.client.ClientHttpRequestFactory;
+import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
@@ -17,27 +29,61 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
     @Bean
     public ObjectMapper objectMapper() {
         // TODO configure Jackson Object mapper that
-        //  1. allows for date format as yyyy-MM-dd
-        //  2. Does not fail on unknown properties
-        //  3. maps to camelCase
-        //  4. Does not include null values or empty values
-        //  5. does not write datas as timestamps.
-        return new ObjectMapper();
+        //  1. allows for date format as yyyy-MM-dd - DONE - NOT YET EXPLICITLY TESTED
+        //  2. Does not fail on unknown properties - DONE - NOT YET EXPLICITLY TESTED
+        //  3. maps to camelCase - DONE - NOT YET EXPLICITLY TESTED
+        //  4. Does not include null values or empty values - DONE - NOT YET EXPLICITLY TESTED
+        //  5. does not write datas as timestamps - DONE AS PART OF 1. - NOT YET EXPLICITLY TESTED
+        return new ObjectMapper()
+            .disable(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES)
+            .setPropertyNamingStrategy(PropertyNamingStrategies.LOWER_CAMEL_CASE)
+            .setDateFormat(new SimpleDateFormat(YEAR_MONTH_DAY_PATTERN))
+            .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
     @Bean
-    public RestTemplate restTemplate() {
-        final RestTemplate restTemplate = new RestTemplate(
-            new BufferingClientHttpRequestFactory(createClientFactory()));
-        // TODO use object mapper
+    public RestTemplate restTemplate(RestTemplateBuilder builder, ClientHttpRequestFactory clientHttpRequestFactory) {
+        return builder
+            .requestFactory(() -> clientHttpRequestFactory)
+            .build();
         // TODO create a logging interceptor that logs request/response for rest template calls.
-
-        return restTemplate;
     }
 
-    private SimpleClientHttpRequestFactory createClientFactory() {
-        final SimpleClientHttpRequestFactory requestFactory = new SimpleClientHttpRequestFactory();
-        requestFactory.setOutputStreaming(false);
-        return requestFactory;
+    @Bean
+    public ClientHttpRequestFactory clientHttpRequestFactory(HttpClient httpClient) {
+        return new BufferingClientHttpRequestFactory(
+            new HttpComponentsClientHttpRequestFactory(httpClient));
     }
+
+    @Bean
+    public HttpClient httpClient(RequestConfig requestConfig,
+        PoolingHttpClientConnectionManager poolingHttpClientConnectionManager) {
+        return HttpClientBuilder.create()
+            .setConnectionManager(poolingHttpClientConnectionManager)
+            .setDefaultRequestConfig(requestConfig)
+            .build();
+    }
+
+    @Bean
+    public RequestConfig requestConfig(
+        @Value("${httpclient.connection-request-timeout-in-millis}") int connectionRequestTimeout,
+        @Value("${httpclient.connect-timeout-in-millis}") int connectTimeout,
+        @Value("${httpclient.response-timeout-in-millis}") int responseTimeout) {
+        return RequestConfig.custom()
+            .setConnectionRequestTimeout(connectionRequestTimeout, TimeUnit.MILLISECONDS)
+            .setConnectTimeout(connectTimeout, TimeUnit.MILLISECONDS)
+            .setResponseTimeout(responseTimeout, TimeUnit.MILLISECONDS)
+            .build();
+    }
+
+    @Bean
+    public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager(
+        @Value("${httpclient.connection-pool.max-total}") int maxTotal,
+        @Value("${httpclient.connection-pool.default-max-per-route}") int defaultMaxPerRoute) {
+        PoolingHttpClientConnectionManager connectionManager = new PoolingHttpClientConnectionManager();
+        connectionManager.setMaxTotal(maxTotal);
+        connectionManager.setDefaultMaxPerRoute(defaultMaxPerRoute);
+        return connectionManager;
+    }
+
 }

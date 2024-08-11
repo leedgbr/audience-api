@@ -109,3 +109,5 @@ Sample response
 * Have not had time, but consider separating the highest level tests (i.e. `ActuatorEndpointTests` and
   `AuditionApplicationTests`) into their own gradle test target and exclude them from the default unit test run. This
   will help provide more accurate granular unit test coverage data and improve granular unit test cycle times.
+* Without knowledge of the domain it's not clear if there are privacy concerns around which users may access which user'
+  s audition posts. Would be good to clarify.

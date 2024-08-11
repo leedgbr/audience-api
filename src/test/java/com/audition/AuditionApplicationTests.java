@@ -61,4 +61,21 @@ class AuditionApplicationTests {
             .andExpect(status().isUnprocessableEntity())
             .andExpect(content().json(Fixture.readFile("com/audition/post-business-error.json")));
     }
+
+    @Test
+    void shouldGetComments() throws Exception {
+        this.mockMvc.perform(get("/posts/8/comments"))
+            .andExpect(status().isOk())
+            .andExpect(content().json(Fixture.readFile("com/audition/comments.json")));
+    }
+
+    @Test
+    void shouldReturnEmptyCommentsListWhenCommentsForPostWithIdDoNotExist() throws Exception {
+        // The downstream system does not provide a way for us to distinguish between a post having no comments vs the
+        // post not existing.  So we need to return an empty list.
+        this.mockMvc.perform(get("/posts/9999999999/comments"))
+            .andExpect(status().isOk())
+            .andExpect(content().json(Fixture.readFile("com/audition/comments-for-non-existent-post.json")));
+    }
+
 }

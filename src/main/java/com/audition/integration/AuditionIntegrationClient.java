@@ -34,15 +34,28 @@ public class AuditionIntegrationClient {
         return Arrays.asList(body);
     }
 
-
-    public AuditionPost getPostByIdWithComments(final String id) {
-        AuditionPost post = getPostById(id);
-        List<Comment> comments = getPostComments(id);
+    public AuditionPost getPost(final String id) {
+        AuditionPost post = getPostOnly(id);
+        List<Comment> comments = getComments(id);
         post.setComments(comments);
         return post;
     }
 
-    private AuditionPost getPostById(final String id) {
+    public List<Comment> getComments(String postId) {
+        try {
+            ResponseEntity<Comment[]> response = handle2xx(
+                restTemplate.getForEntity(String.format("%s/posts/%s/comments", baseUrl, postId), Comment[].class));
+            return getCommentsBody(response, postId);
+        } catch (final HttpClientErrorException e) {
+            // Unfortunately, there is no error response returned when trying to fetch comments for a post id that does
+            // not exist.  This is the case for both possible URLs for fetching comments.  Since we aren't able to
+            // differentiate between a post not existing vs there being no comments for a post we will need to return an
+            // empty comment list in both of those situations.
+            throw new SystemException("Unexpected error fetching comments by id", e);
+        }
+    }
+
+    private AuditionPost getPostOnly(final String id) {
         try {
             ResponseEntity<AuditionPost> response = handle2xx(
                 restTemplate.getForEntity(String.format("%s/posts/%s", baseUrl, id), AuditionPost.class));
@@ -54,23 +67,6 @@ public class AuditionIntegrationClient {
             throw new SystemException("Unexpected error fetching post by id", e);
         }
     }
-
-    private List<Comment> getPostComments(String id) {
-        try {
-            ResponseEntity<Comment[]> response = handle2xx(
-                restTemplate.getForEntity(String.format("%s/posts/%s/comments", baseUrl, id), Comment[].class));
-            return getCommentsBody(response, id);
-        } catch (final HttpClientErrorException e) {
-            if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw BusinessException.newResourceNotFound(
-                    String.format("Cannot find a Comments for a Post with id '%s'", id));
-            }
-            throw new SystemException("Unexpected error fetching comments by id", e);
-        }
-    }
-
-    // TODO write a method. GET comments for a particular Post from https://jsonplaceholder.typicode.com/comments?postId={postId}.
-    // The comments are a separate list that needs to be returned to the API consumers. Hint: this is not part of the AuditionPost pojo.
 
     private AuditionPost getPostBody(ResponseEntity<AuditionPost> response, String id) {
         AuditionPost post = response.getBody();

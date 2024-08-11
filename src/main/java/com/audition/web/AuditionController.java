@@ -1,6 +1,7 @@
 package com.audition.web;
 
 import com.audition.model.AuditionPost;
+import com.audition.model.Comment;
 import com.audition.service.AuditionService;
 import java.util.List;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -27,7 +28,7 @@ public class AuditionController {
     }
 
     @RequestMapping(value = "/posts/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
-    public @ResponseBody AuditionPost getPosts(@PathVariable("id") final String postId) {
+    public @ResponseBody AuditionPost getPost(@PathVariable("id") final String postId) {
         final AuditionPost auditionPosts = auditionService.getPostById(postId);
 
         // TODO Add input validation
@@ -35,6 +36,13 @@ public class AuditionController {
         return auditionPosts;
     }
 
-    // TODO Add additional methods to return comments for each post. Hint: Check https://jsonplaceholder.typicode.com/
+    @RequestMapping(value = "/posts/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
+    public @ResponseBody List<Comment> getComments(@PathVariable("id") final String postId) {
+        final List<Comment> comments = auditionService.getComments(postId);
+
+        // TODO Add input validation
+
+        return comments;
+    }
 
 }

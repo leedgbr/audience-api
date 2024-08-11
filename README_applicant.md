@@ -93,6 +93,7 @@ Sample response
 * The Audition source system contract states that it will respond with http status 200 for success. We don't expect it
   to return 201, or any other 2xx success statuses.
 * There is no specific requirement to expose details about system errors to clients.
+* There is a user scenario that requires a list of post comments without the post details.
 
 ## Notes
 
@@ -110,4 +111,24 @@ Sample response
   `AuditionApplicationTests`) into their own gradle test target and exclude them from the default unit test run. This
   will help provide more accurate granular unit test coverage data and improve granular unit test cycle times.
 * Without knowledge of the domain it's not clear if there are privacy concerns around which users may access which user'
-  s audition posts. Would be good to clarify.
+  s audition posts / comments. Needs clarifying with product.
+* Both methods of fetching back comments gave the same response.
+  i.e. https://jsonplaceholder.typicode.com/comments?postId={postId}
+  and https://jsonplaceholder.typicode.com/posts/{postId}/comments . It seems they are different methods of retrieving
+  the same results, therefore I have wired up only one of them. It looks like these are endpoint stylistic differences.
+  The limited documentation provides no further clues. In the real world, this may warrant double-checking behaviour of
+  these endpoints with an SME. There may be some data I haven't checked that exhibits a difference in behaviour between
+  the two ways of fetching comments. It's not currently warranted to do an exhaustive check of the data, and in a
+  real situation this may be impossible due to volume.
+* The simplest possible solution I can think of (around fetching posts / comments) involves the following two user
+  scenarios.. 1) view all posts (without comments), 2) view a single post with comments. Given this, at the point the
+  user wants to view a single post with comments the client already has the post details, and so would not need them
+  fetched again. The client could simply fetch the comments for the post and display this with the post details they
+  already have. Additionally, there is a performance impact fetching a post and it's comments together because we need
+  to make two separate calls to get each of those details - so it would be great if we didn't need to support this. It
+  is possible that there may be another user scenario where a user may have 'favourited' a post, in which case we may
+  need to fetch the post and the comments together. However, prior to implementing support for this user scenario, it
+  would be worth a conversation with product and possibly the wider team, to make sure we fully understand the possible
+  user scenarios and are all on the same page. For the purposes of this exercise I have supported all three user
+  scenarios described.
+  

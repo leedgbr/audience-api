@@ -40,6 +40,7 @@ public class StubIntegrationClient implements IAuditionIntegrationClient {
         return Arrays.asList(post1, post2);
     }
 
+    @SuppressWarnings("PMD.AvoidThrowingRawExceptionTypes")
     @Override
     public AuditionPost getPost(final String id) {
         if ("123".equals(id)) {

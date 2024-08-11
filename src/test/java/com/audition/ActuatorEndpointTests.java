@@ -11,6 +11,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.TestPropertySource;
 import org.springframework.test.web.servlet.MockMvc;
 
+@SuppressWarnings({
+    "PMD.JUnitTestsShouldIncludeAssert",
+    "PMD.SignatureDeclareThrowsException"
+})
 @SpringBootTest
 @AutoConfigureMockMvc
 @TestPropertySource(locations = "classpath:application-local.yml")

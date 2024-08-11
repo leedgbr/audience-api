@@ -59,6 +59,7 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         }
     }
 
+    @SuppressWarnings("PMD.PreserveStackTrace")
     private AuditionPost getPostOnly(final String id) {
         try {
             final ResponseEntity<AuditionPost> response = handle2xx(
@@ -66,7 +67,8 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
             return getPostBody(response, id);
         } catch (final HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw BusinessException.newResourceNotFound(String.format("Cannot find a Post with id '%s'", id));
+                throw BusinessException
+                    .newResourceNotFound(String.format("Cannot find a Post with id '%s'", id));
             }
             throw new SystemException("Unexpected error fetching post by id", e);
         }

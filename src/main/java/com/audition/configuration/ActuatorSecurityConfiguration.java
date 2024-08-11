@@ -8,6 +8,7 @@ import org.springframework.security.web.SecurityFilterChain;
 @Configuration
 public class ActuatorSecurityConfiguration {
 
+    @SuppressWarnings("PMD.SignatureDeclareThrowsException")
     @Bean
     public SecurityFilterChain filterChain(final HttpSecurity http) throws Exception {
         http

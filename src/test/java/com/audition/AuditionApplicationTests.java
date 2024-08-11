@@ -63,6 +63,13 @@ class AuditionApplicationTests {
     }
 
     @Test
+    void shouldReturnValidationErrorWhenGetPostInputInvalid() throws Exception {
+        this.mockMvc.perform(get("/posts/     "))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().json(Fixture.readFile("com/audition/post-business-error-validation.json")));
+    }
+
+    @Test
     void shouldGetComments() throws Exception {
         this.mockMvc.perform(get("/posts/8/comments"))
             .andExpect(status().isOk())
@@ -78,4 +85,10 @@ class AuditionApplicationTests {
             .andExpect(content().json(Fixture.readFile("com/audition/comments-for-non-existent-post.json")));
     }
 
+    @Test
+    void shouldReturnValidationErrorWhenGetCommentsInputInvalid() throws Exception {
+        this.mockMvc.perform(get("/posts/ABCD/comments"))
+            .andExpect(status().isUnprocessableEntity())
+            .andExpect(content().json(Fixture.readFile("com/audition/comments-business-error-validation.json")));
+    }
 }

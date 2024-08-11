@@ -1,0 +1,10 @@
+{
+  "type": "about:blank",
+  "title": "Validation",
+  "status": 422,
+  "detail": "POST_ID_MUST_BE_NUMERIC",
+  "instance": "/posts/ABCD/comments",
+  "properties": {
+    "field": "id"
+  }
+}

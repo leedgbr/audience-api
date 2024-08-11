@@ -17,6 +17,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
 
     private static final String TITLE_DEFAULT = "API Error Occurred";
     private static final String MESSAGE_DEFAULT = "API Error occurred. Please contact support or administrator.";
+    private static final String PROPERTY_NAME_FIELD = "field";
 
     private static final Logger LOG = LoggerFactory.getLogger(ExceptionControllerAdvice.class);
 
@@ -55,6 +56,7 @@ public class ExceptionControllerAdvice extends ResponseEntityExceptionHandler {
         final ProblemDetail problemDetail = ProblemDetail.forStatus(HttpStatus.UNPROCESSABLE_ENTITY);
         problemDetail.setTitle(e.getTitle());
         problemDetail.setDetail(e.getDetail());
+        problemDetail.setProperty(PROPERTY_NAME_FIELD, e.getField());
         return problemDetail;
     }
 }

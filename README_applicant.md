@@ -94,6 +94,8 @@ Sample response
   to return 201, or any other 2xx success statuses.
 * There is no specific requirement to expose details about system errors to clients.
 * There is a user scenario that requires a list of post comments without the post details.
+* The source system is a trusted system that does not return anything crazy that we shouldn't be returning back to
+  clients.
 
 ## Notes
 
@@ -131,4 +133,8 @@ Sample response
   would be worth a conversation with product and possibly the wider team, to make sure we fully understand the possible
   user scenarios and are all on the same page. For the purposes of this exercise I have supported all three user
   scenarios described.
+* Noticed that `com.audition.model.AuditionPost` in the post list now contains a `Comment` list, however that is not (
+  currently) in sync with what we return from the list posts endpoint. Currently, the one model is used for
+  communication with the source system and for what the audition api returns. If the model becomes more complex, it may
+  make sense decouple these so that it remains easy to understand the codebase. 
   

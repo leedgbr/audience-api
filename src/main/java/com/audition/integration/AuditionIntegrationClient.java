@@ -16,7 +16,7 @@ import org.springframework.web.client.HttpClientErrorException;
 import org.springframework.web.client.RestTemplate;
 
 @Component
-public class AuditionIntegrationClient {
+public class AuditionIntegrationClient implements IAuditionIntegrationClient {
 
     @Autowired
     private RestTemplate restTemplate;

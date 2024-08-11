@@ -1,0 +1,10 @@
+{
+  "type": "about:blank",
+  "title": "Validation",
+  "status": 422,
+  "detail": "POST_ID_REQUIRED",
+  "instance": "/posts/%20%20%20%20%20",
+  "properties": {
+    "field": "id"
+  }
+}

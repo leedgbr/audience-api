@@ -13,11 +13,20 @@ public class BusinessException extends RuntimeException {
     private static final String TITLE_RESOURCE_NOT_FOUND = "Resource Not Found";
 
     private String title;
+    private String field;
     private String detail;
 
     public static BusinessException newValidationError(String detail) {
         BusinessException e = new BusinessException();
         e.title = TITLE_VALIDATION;
+        e.detail = detail;
+        return e;
+    }
+
+    public static BusinessException newValidationError(String field, String detail) {
+        BusinessException e = new BusinessException();
+        e.title = TITLE_VALIDATION;
+        e.field = field;
         e.detail = detail;
         return e;
     }

@@ -29,20 +29,12 @@ public class AuditionController {
 
     @RequestMapping(value = "/posts/{id}", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody AuditionPost getPost(@PathVariable("id") final String postId) {
-        final AuditionPost auditionPosts = auditionService.getPostById(postId);
-
-        // TODO Add input validation
-
-        return auditionPosts;
+        return auditionService.getPostById(postId);
     }
 
     @RequestMapping(value = "/posts/{id}/comments", method = RequestMethod.GET, produces = MediaType.APPLICATION_JSON_VALUE)
     public @ResponseBody List<Comment> getComments(@PathVariable("id") final String postId) {
-        final List<Comment> comments = auditionService.getComments(postId);
-
-        // TODO Add input validation
-
-        return comments;
+        return auditionService.getComments(postId);
     }
 
 }

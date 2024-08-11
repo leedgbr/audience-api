@@ -96,6 +96,7 @@ Sample response
 * There is a user scenario that requires a list of post comments without the post details.
 * The source system is a trusted system that does not return anything crazy that we shouldn't be returning back to
   clients.
+* The source system filtering of posts by user behaves sensibly and as we would expect.
 
 ## Notes
 
@@ -136,5 +137,13 @@ Sample response
 * Noticed that `com.audition.model.AuditionPost` in the post list now contains a `Comment` list, however that is not (
   currently) in sync with what we return from the list posts endpoint. Currently, the one model is used for
   communication with the source system and for what the audition api returns. If the model becomes more complex, it may
-  make sense decouple these so that it remains easy to understand the codebase. 
-  
+  make sense decouple these so that it remains easy to understand the codebase.
+* One of the TODO comments mentioned adding a filter to the `/posts/` operation. A useful filter might be to filter
+  the results by user. It turns out that this is implemented by the source system, which means we are able to delegate
+  the implementation of this feature. Provided there are no really specific requirements around filtering this should be
+  sufficient.
+* When time allows, add environment specific configuration to ensure the service is correctly configured for the
+  environment it is deployed to.
+* Source system data has been stubbed locally for the more granular tests. The provides flexibility, with only the
+  coarse grained tests directly wired to the remote source system endpoint. Depending on preferences of the team,
+  various different strategies could be used for sourcing and setting up test data.      

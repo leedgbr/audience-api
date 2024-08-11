@@ -19,16 +19,16 @@ public class AuditionService {
         this.validator = validator;
     }
 
-    public List<AuditionPost> getPosts() {
-        return client.getPosts();
+    public List<AuditionPost> getPosts(String userId) {
+        return client.getPosts(userId);
     }
 
-    public AuditionPost getPostById(final String postId) {
+    public AuditionPost getPostById(String postId) {
         validator.validate(postId);
         return client.getPost(postId);
     }
 
-    public List<Comment> getComments(final String postId) {
+    public List<Comment> getComments(String postId) {
         validator.validate(postId);
         return client.getComments(postId);
     }

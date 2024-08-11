@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface IAuditionIntegrationClient {
 
-    List<AuditionPost> getPosts();
+    List<AuditionPost> getPosts(String userID);
 
-    AuditionPost getPost(final String id);
+    AuditionPost getPost(String id);
 
     List<Comment> getComments(String postId);
 }

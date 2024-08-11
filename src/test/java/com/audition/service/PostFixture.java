@@ -22,6 +22,22 @@ public class PostFixture {
         return Arrays.asList(post1, post2);
     }
 
+    static List<AuditionPost> getExpectedPostsForUser() {
+        AuditionPost post1 = new AuditionPost();
+        post1.setId(7);
+        post1.setUserId(5);
+        post1.setTitle("title7");
+        post1.setBody("body7");
+
+        AuditionPost post2 = new AuditionPost();
+        post2.setId(74);
+        post2.setUserId(5);
+        post2.setTitle("title74");
+        post2.setBody("body74");
+
+        return Arrays.asList(post1, post2);
+    }
+
     static AuditionPost getExpectedPost() {
         AuditionPost post = new AuditionPost();
         post.setId(123);

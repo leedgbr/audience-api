@@ -31,14 +31,26 @@ public class PostFixture {
         return Arrays.asList(post1, post2, post3);
     }
 
-    static AuditionPost getExpectedPost() {
-        AuditionPost post = new AuditionPost();
-        post.setId(123);
-        post.setUserId(1);
-        post.setTitle("sunt aut facere repellat provident occaecati excepturi optio reprehenderit");
-        post.setBody(
-            "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto");
-        return post;
+    static List<AuditionPost> getExpectedPostsForUser() {
+        AuditionPost post1 = new AuditionPost();
+        post1.setId(11);
+        post1.setUserId(8);
+        post1.setTitle("title11");
+        post1.setBody("body11");
+
+        AuditionPost post2 = new AuditionPost();
+        post2.setId(12);
+        post2.setUserId(8);
+        post2.setTitle("title12");
+        post2.setBody("body12");
+
+        AuditionPost post3 = new AuditionPost();
+        post3.setId(13);
+        post3.setUserId(8);
+        post3.setTitle("title13");
+        post3.setBody("body13");
+
+        return Arrays.asList(post1, post2, post3);
     }
 
     static AuditionPost getExpectedPostWithComments() {

@@ -49,6 +49,13 @@ class AuditionApplicationTests {
     }
 
     @Test
+    void shouldGetAllPostsFilteredByUserId() throws Exception {
+        this.mockMvc.perform(get("/posts?userId=1"))
+            .andExpect(status().isOk())
+            .andExpect(content().json(Fixture.readFile("com/audition/post-for-user.json")));
+    }
+
+    @Test
     void shouldGetPostWithId() throws Exception {
         this.mockMvc.perform(get("/posts/8"))
             .andExpect(status().isOk())

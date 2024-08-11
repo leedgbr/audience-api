@@ -7,6 +7,7 @@ import com.audition.model.Comment;
 import java.net.URL;
 import java.util.Arrays;
 import java.util.List;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.http.HttpStatus;
@@ -24,9 +25,9 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
     @Value("${audition-source-url}")
     private URL baseUrl;
 
-    public List<AuditionPost> getPosts() {
+    public List<AuditionPost> getPosts(String userId) {
         ResponseEntity<AuditionPost[]> response = handle2xx(
-            restTemplate.getForEntity(String.format("%s/posts", baseUrl), AuditionPost[].class));
+            restTemplate.getForEntity(getPostUrl(userId), AuditionPost[].class));
         AuditionPost[] body = response.getBody();
         if (body == null) {
             throw new SystemException("Missing list content when fetching posts", response.getStatusCode().value());
@@ -94,4 +95,14 @@ public class AuditionIntegrationClient implements IAuditionIntegrationClient {
         }
         return response;
     }
+
+    private String getPostUrl(String userId) {
+        StringBuilder builder = new StringBuilder();
+        builder.append(String.format("%s/posts", baseUrl));
+        if (!StringUtils.isBlank(userId)) {
+            builder.append(String.format("?userId=%s", userId));
+        }
+        return builder.toString();
+    }
+
 }

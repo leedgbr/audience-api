@@ -46,6 +46,7 @@ class AuditionIntegrationClientTest {
     private MockRestServiceServer mockServer;
 
     private URI postsUri;
+    private URI postsFilteredByUserUri;
     private URI postByIdUri;
     private URI commentsUri;
 
@@ -53,6 +54,7 @@ class AuditionIntegrationClientTest {
     public void init() throws URISyntaxException {
         mockServer = MockRestServiceServer.createServer(restTemplate);
         postsUri = new URI("http://audience-post-source-system/posts");
+        postsFilteredByUserUri = new URI("http://audience-post-source-system/posts?userId=8");
         postByIdUri = new URI("http://audience-post-source-system/posts/123");
         commentsUri = new URI("http://audience-post-source-system/posts/123/comments");
     }
@@ -65,9 +67,24 @@ class AuditionIntegrationClientTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ClassPathResource("com/audition/integration/posts.json"))
             );
-        List<AuditionPost> posts = client.getPosts();
+        String userId = null;
+        List<AuditionPost> posts = client.getPosts(userId);
         mockServer.verify();
         assertThat(PostFixture.getExpectedPosts(), contains(posts.toArray()));
+    }
+
+    @Test
+    public void getAllPostsForUser() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postsFilteredByUserUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/posts-for-user.json"))
+            );
+        String userId = "8";
+        List<AuditionPost> posts = client.getPosts(userId);
+        mockServer.verify();
+        assertThat(PostFixture.getExpectedPostsForUser(), contains(posts.toArray()));
     }
 
     @Test
@@ -78,7 +95,8 @@ class AuditionIntegrationClientTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ClassPathResource("com/audition/integration/posts-empty-list.json"))
             );
-        List<AuditionPost> posts = client.getPosts();
+        String userId = null;
+        List<AuditionPost> posts = client.getPosts(userId);
         mockServer.verify();
         assertThat(posts, is(empty()));
     }
@@ -88,9 +106,9 @@ class AuditionIntegrationClientTest {
         mockServer.expect(ExpectedCount.once(), requestTo(postsUri))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.ACCEPTED));
-
+        String userId = null;
         SystemException exception = assertThrows(
-            SystemException.class, () -> client.getPosts()
+            SystemException.class, () -> client.getPosts(userId)
         );
         assertEquals("Non http 200 success when fetching posts", exception.getMessage());
         assertEquals(202, exception.getStatusCode());
@@ -102,8 +120,9 @@ class AuditionIntegrationClientTest {
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
 
+        String userId = null;
         RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> client.getPosts()
+            RuntimeException.class, () -> client.getPosts(userId)
         );
         assertEquals("500 Internal Server Error: [no body]", exception.getMessage());
     }

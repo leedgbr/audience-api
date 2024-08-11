@@ -21,8 +21,16 @@ class AuditionServiceTest {
 
     @Test
     public void posts() {
-        List<AuditionPost> post = service.getPosts();
+        String userId = null;
+        List<AuditionPost> post = service.getPosts(userId);
         assertEquals(PostFixture.getExpectedPosts(), post);
+    }
+
+    @Test
+    public void postsFilteredByUserId() {
+        String userId = "5";
+        List<AuditionPost> post = service.getPosts(userId);
+        assertEquals(PostFixture.getExpectedPostsForUser(), post);
     }
 
     @Test

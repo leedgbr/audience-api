@@ -19,6 +19,7 @@ import org.springframework.http.client.BufferingClientHttpRequestFactory;
 import org.springframework.http.client.ClientHttpRequestFactory;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.web.client.RestTemplate;
+import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
 
@@ -88,4 +89,10 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
         return connectionManager;
     }
 
+    @Override
+    public void addInterceptors(final InterceptorRegistry registry) {
+        registry
+            .addInterceptor(new ResponseHeaderInjector())
+            .addPathPatterns("/**");
+    }
 }

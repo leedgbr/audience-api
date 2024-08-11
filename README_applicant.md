@@ -146,4 +146,12 @@ Sample response
   environment it is deployed to.
 * Source system data has been stubbed locally for the more granular tests. The provides flexibility, with only the
   coarse grained tests directly wired to the remote source system endpoint. Depending on preferences of the team,
-  various different strategies could be used for sourcing and setting up test data.      
+  various different strategies could be used for sourcing and setting up test data.
+* An environment variable `SECURITY_PASSWORD` is used to set the default spring security password when the application
+  starts up. Spring Security has been enabled in order to restrict access to various endpoints while allowing the
+  possibility of allowing access to some authenticated users at a later date when authentication has been implemented.
+  Setting the `SECURITY_PASSWORD` environment variable means that a default password is not generated and displayed in
+  the logs, which would present a security risk in production. When this services is deployed to production, an
+  appropriately secure password should be set in this environment variable to ensure no one is able to access the
+  protected endpoints. This is a very basic level of security implementable in the time available, would suggest
+  improving on this when time allows.

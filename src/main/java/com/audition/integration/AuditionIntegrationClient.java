@@ -34,7 +34,15 @@ public class AuditionIntegrationClient {
         return Arrays.asList(body);
     }
 
-    public AuditionPost getPostById(final String id) {
+
+    public AuditionPost getPostByIdWithComments(final String id) {
+        AuditionPost post = getPostById(id);
+        List<Comment> comments = getPostComments(id);
+        post.setComments(comments);
+        return post;
+    }
+
+    private AuditionPost getPostById(final String id) {
         try {
             ResponseEntity<AuditionPost> response = handle2xx(
                 restTemplate.getForEntity(String.format("%s/posts/%s", baseUrl, id), AuditionPost.class));
@@ -47,13 +55,6 @@ public class AuditionIntegrationClient {
         }
     }
 
-    public AuditionPost getPostByIdWithComments(final String id) {
-        AuditionPost post = getPostById(id);
-        List<Comment> comments = getPostComments(id);
-        post.setComments(comments);
-        return post;
-    }
-
     private List<Comment> getPostComments(String id) {
         try {
             ResponseEntity<Comment[]> response = handle2xx(
@@ -61,17 +62,15 @@ public class AuditionIntegrationClient {
             return getCommentsBody(response, id);
         } catch (final HttpClientErrorException e) {
             if (e.getStatusCode() == HttpStatus.NOT_FOUND) {
-                throw BusinessException.newResourceNotFound(String.format("Cannot find a Post with id '%s'", id));
+                throw BusinessException.newResourceNotFound(
+                    String.format("Cannot find a Comments for a Post with id '%s'", id));
             }
-            throw new SystemException("Unexpected error fetching post by id", e);
+            throw new SystemException("Unexpected error fetching comments by id", e);
         }
     }
 
-    // TODO Write a method GET comments for a post from https://jsonplaceholder.typicode.com/posts/{postId}/comments - the comments must be returned as part of the post.
-
     // TODO write a method. GET comments for a particular Post from https://jsonplaceholder.typicode.com/comments?postId={postId}.
     // The comments are a separate list that needs to be returned to the API consumers. Hint: this is not part of the AuditionPost pojo.
-
 
     private AuditionPost getPostBody(ResponseEntity<AuditionPost> response, String id) {
         AuditionPost post = response.getBody();

@@ -18,7 +18,7 @@ public class AuditionService {
     }
 
     public AuditionPost getPostById(final String postId) {
-        return auditionIntegrationClient.getPostById(postId);
+        return auditionIntegrationClient.getPostByIdWithComments(postId);
     }
 
 }

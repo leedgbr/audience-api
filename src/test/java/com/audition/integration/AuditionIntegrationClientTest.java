@@ -115,86 +115,6 @@ class AuditionIntegrationClientTest {
                 .contentType(MediaType.APPLICATION_JSON)
                 .body(new ClassPathResource("com/audition/integration/post.json"))
             );
-        AuditionPost post = client.getPostById("123");
-        mockServer.verify();
-        assertEquals(Fixture.getExpectedPost(), post);
-    }
-
-    @Test
-    public void getPostByIdNotFound() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.NOT_FOUND));
-        BusinessException exception = assertThrows(
-            BusinessException.class, () -> client.getPostById("123")
-        );
-        mockServer.verify();
-        assertEquals("Resource Not Found", exception.getTitle());
-        assertEquals("Cannot find a Post with id '123'", exception.getDetail());
-    }
-
-    @Test
-    public void getPostByIdEmpty() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ClassPathResource("com/audition/integration/post-empty.json"))
-            );
-        SystemException exception = assertThrows(
-            SystemException.class, () -> client.getPostById("123")
-        );
-        mockServer.verify();
-        assertEquals("Missing content for Post with id '123'", exception.getMessage());
-        assertEquals(200, exception.getStatusCode());
-    }
-
-    @Test
-    public void getPostById2xxResponseOtherThan200() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.ACCEPTED));
-
-        SystemException exception = assertThrows(
-            SystemException.class, () -> client.getPostById("123")
-        );
-        assertEquals("Non http 200 success when fetching posts", exception.getMessage());
-        assertEquals(202, exception.getStatusCode());
-    }
-
-    @Test
-    public void getPostByIdHttpClientErrorResponse() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.FORBIDDEN));
-
-        SystemException exception = assertThrows(
-            SystemException.class, () -> client.getPostById("123")
-        );
-        assertEquals("Unexpected error fetching post by id", exception.getMessage());
-        assertEquals("403 Forbidden: [no body]", exception.getCause().getMessage());
-    }
-
-    @Test
-    public void getPostByIdErrorResponse() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
-
-        RuntimeException exception = assertThrows(
-            RuntimeException.class, () -> client.getPostById("123")
-        );
-        assertEquals("500 Internal Server Error: [no body]", exception.getMessage());
-    }
-
-    @Test
-    public void getPostByIdWithComments() {
-        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.OK)
-                .contentType(MediaType.APPLICATION_JSON)
-                .body(new ClassPathResource("com/audition/integration/post.json"))
-            );
         mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
             .andExpect(method(HttpMethod.GET))
             .andRespond(withStatus(HttpStatus.OK)
@@ -206,5 +126,168 @@ class AuditionIntegrationClientTest {
         assertEquals(Fixture.getExpectedPostWithComments(), post);
     }
 
+    @Test
+    public void getPostByIdPostNotFound() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.NOT_FOUND));
+        BusinessException exception = assertThrows(
+            BusinessException.class, () -> client.getPostByIdWithComments("123")
+        );
+        mockServer.verify();
+        assertEquals("Resource Not Found", exception.getTitle());
+        assertEquals("Cannot find a Post with id '123'", exception.getDetail());
+    }
+
+    @Test
+    public void getPostByIdPostEmpty() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post-empty.json"))
+            );
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        mockServer.verify();
+        assertEquals("Missing content for Post with id '123'", exception.getMessage());
+        assertEquals(200, exception.getStatusCode());
+    }
+
+    @Test
+    public void getPostByIdGetPost2xxResponseOtherThan200() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.ACCEPTED));
+
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("Non http 200 success when fetching posts", exception.getMessage());
+        assertEquals(202, exception.getStatusCode());
+    }
+
+    @Test
+    public void getPostByIdGetPostHttpClientErrorResponse() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.FORBIDDEN));
+
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("Unexpected error fetching post by id", exception.getMessage());
+        assertEquals("403 Forbidden: [no body]", exception.getCause().getMessage());
+    }
+
+    @Test
+    public void getPostByIdGetPostErrorResponse() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        RuntimeException exception = assertThrows(
+            RuntimeException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("500 Internal Server Error: [no body]", exception.getMessage());
+    }
+
+    @Test
+    public void getPostByIdCommentsNotFound() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post.json"))
+            );
+        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.NOT_FOUND));
+        BusinessException exception = assertThrows(
+            BusinessException.class, () -> client.getPostByIdWithComments("123")
+        );
+        mockServer.verify();
+        assertEquals("Resource Not Found", exception.getTitle());
+        assertEquals("Cannot find a Comments for a Post with id '123'", exception.getDetail());
+    }
+
+    @Test
+    public void getPostByIdCommentsEmpty() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post.json"))
+            );
+        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/comments-empty.json"))
+            );
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        mockServer.verify();
+        assertEquals("Missing content for Comments for Post with id '123'", exception.getMessage());
+        assertEquals(200, exception.getStatusCode());
+    }
+
+    @Test
+    public void getPostByIdGetComments2xxResponseOtherThan200() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post.json"))
+            );
+        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.ACCEPTED));
+
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("Non http 200 success when fetching posts", exception.getMessage());
+        assertEquals(202, exception.getStatusCode());
+    }
+
+    @Test
+    public void getPostByIdGetCommentsHttpClientErrorResponse() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post.json"))
+            );
+        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.FORBIDDEN));
+
+        SystemException exception = assertThrows(
+            SystemException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("Unexpected error fetching comments by id", exception.getMessage());
+        assertEquals("403 Forbidden: [no body]", exception.getCause().getMessage());
+    }
+
+    @Test
+    public void getPostByIdGetCommentsErrorResponse() {
+        mockServer.expect(ExpectedCount.once(), requestTo(postByIdUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.OK)
+                .contentType(MediaType.APPLICATION_JSON)
+                .body(new ClassPathResource("com/audition/integration/post.json"))
+            );
+        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
+            .andExpect(method(HttpMethod.GET))
+            .andRespond(withStatus(HttpStatus.INTERNAL_SERVER_ERROR));
+
+        RuntimeException exception = assertThrows(
+            RuntimeException.class, () -> client.getPostByIdWithComments("123")
+        );
+        assertEquals("500 Internal Server Error: [no body]", exception.getMessage());
+    }
 }
 

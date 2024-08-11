@@ -52,26 +52,13 @@ class AuditionApplicationTests {
     void shouldGetPostWithId() throws Exception {
         this.mockMvc.perform(get("/posts/8"))
             .andExpect(status().isOk())
-            .andExpect(content().json(
-                """
-                    {
-                      userId: 1,
-                      id: 8,
-                      title: "dolorem dolore est ipsam",
-                      body: "dignissimos aperiam dolorem qui eum
-                    facilis quibusdam animi sint suscipit qui sint possimus cum
-                    quaerat magni maiores excepturi
-                    ipsam ut commodi dolor voluptatum modi aut vitae"
-                    }"""));
+            .andExpect(content().json(Fixture.readFile("com/audition/post.json")));
     }
 
     @Test
     void shouldReturnBusinessErrorWhenPostWithIdDoesNotExist() throws Exception {
         this.mockMvc.perform(get("/posts/9999999999"))
             .andExpect(status().isUnprocessableEntity())
-            .andExpect(jsonPath("$.status").value(422))
-            .andExpect(jsonPath("$.title").value("Resource Not Found"))
-            .andExpect(jsonPath("$.detail").value("Cannot find a Post with id '9999999999'"))
-            .andExpect(jsonPath("$.instance").value("/posts/9999999999"));
+            .andExpect(content().json(Fixture.readFile("com/audition/post-business-error.json")));
     }
 }

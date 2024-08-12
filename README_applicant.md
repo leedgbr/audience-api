@@ -58,7 +58,32 @@ Sample response
       "id": 65,
       "title": "sunt aut facere repellat provident occaecati excepturi optio reprehenderit",
       "body": "quia et suscipit\nsuscipit recusandae consequuntur expedita et cum\nreprehenderit molestiae ut ut quas totam\nnostrum rerum est autem sunt rem eveniet architecto"
+      "comments": [
+        {
+          "id": 321,
+          "name": "rem ducimus ipsam ut est vero distinctio et",
+          "email": "Danyka_Stark@jedidiah.name",
+          "body": "ea necessitatibus eum nesciunt corporis\nminus in quisquam iste recusandae\nqui nobis deleniti asperiores non laboriosam sunt molestiae dolore\ndistinctio qui officiis tempora dolorem ea"
+        },
+        ...
+      ]
     }
+
+### Fetch comments by post id
+
+    curl http://localhost:8080/posts/65/comments
+
+Sample response
+
+    [
+      {
+        "id": 321,
+        "name": "rem ducimus ipsam ut est vero distinctio et",
+        "email": "Danyka_Stark@jedidiah.name",
+        "body": "ea necessitatibus eum nesciunt corporis\nminus in quisquam iste recusandae\nqui nobis deleniti asperiores non laboriosam sunt molestiae dolore\ndistinctio qui officiis tempora dolorem ea"
+      },
+      ...
+    ]
 
 ### Metrics
 

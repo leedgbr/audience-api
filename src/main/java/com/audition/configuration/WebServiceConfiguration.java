@@ -22,12 +22,19 @@ import org.springframework.web.client.RestTemplate;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 
-
+/**
+ * Custom configuration for spring web mvc.
+ */
 @Configuration
 public class WebServiceConfiguration implements WebMvcConfigurer {
 
     private static final String YEAR_MONTH_DAY_PATTERN = "yyyy-MM-dd";
 
+    /**
+     * Configures the jackson ObjectMapper to serialise and deserialize objects to json in the expected manner.
+     *
+     * @return The configured ObjectMapper.
+     */
     @Bean
     public ObjectMapper objectMapper() {
         // TODO configure Jackson Object mapper that
@@ -43,6 +50,13 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
             .setSerializationInclusion(JsonInclude.Include.NON_NULL);
     }
 
+    /**
+     * Configures the RestTemplate for use when communicating via http with collaborating services.
+     *
+     * @param builder                  The spring boot initialised RestTemplateBuilder
+     * @param clientHttpRequestFactory The currently configured request factory
+     * @return The configured RestTemplate.
+     */
     @Bean
     public RestTemplate restTemplate(final RestTemplateBuilder builder,
         final ClientHttpRequestFactory clientHttpRequestFactory) {
@@ -52,12 +66,27 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
         // TODO create a logging interceptor that logs request/response for rest template calls.
     }
 
+    /**
+     * Configures the request factory to buffer reading of http response streams.
+     *
+     * @param httpClient The currently configured http client
+     * @return The configured ClientHttpRequestFactory.
+     */
     @Bean
     public ClientHttpRequestFactory clientHttpRequestFactory(final HttpClient httpClient) {
         return new BufferingClientHttpRequestFactory(
             new HttpComponentsClientHttpRequestFactory(httpClient));
     }
 
+    /**
+     * Configures the apache http client with the desired timeouts and connection pool.
+     *
+     * @param requestConfig                      The RequestConfig which includes the desired timeouts and other request
+     *                                           settings
+     * @param poolingHttpClientConnectionManager The already configured connection manager implementation which uses a
+     *                                           connection pool
+     * @return The configured HttpClient.
+     */
     @Bean
     public HttpClient httpClient(final RequestConfig requestConfig,
         final PoolingHttpClientConnectionManager poolingHttpClientConnectionManager) {
@@ -67,6 +96,14 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
             .build();
     }
 
+    /**
+     * Sets the desired timeouts - from externalised configuration - on the apache http client request configuration.
+     *
+     * @param connectionRequestTimeout The desired timeout when requesting a connection from the connection manager
+     * @param connectTimeout           The desired timeout when establishing a connection
+     * @param responseTimeout          The desired timeout when waiting for a http response
+     * @return The RequestConfig
+     */
     @Bean
     public RequestConfig requestConfig(
         @Value("${httpclient.connection-request-timeout-in-millis}") final int connectionRequestTimeout,
@@ -79,6 +116,13 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
             .build();
     }
 
+    /**
+     * Configures an apache connection manager that implements connection pooling.
+     *
+     * @param maxTotal           The maximum total number of connections to be kept in the pool
+     * @param defaultMaxPerRoute The number of connections allowed to be used for each http host connected to
+     * @return The configured PoolingHttpClientConnectionManager.
+     */
     @Bean
     public PoolingHttpClientConnectionManager poolingHttpClientConnectionManager(
         @Value("${httpclient.connection-pool.max-total}") final int maxTotal,
@@ -89,6 +133,11 @@ public class WebServiceConfiguration implements WebMvcConfigurer {
         return connectionManager;
     }
 
+    /**
+     * Configures the response header injector on all routes.
+     *
+     * @param registry The spring interceptor registry.
+     */
     @Override
     public void addInterceptors(final InterceptorRegistry registry) {
         registry

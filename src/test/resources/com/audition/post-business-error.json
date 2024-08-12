@@ -2,6 +2,6 @@
   "type": "about:blank",
   "title": "Resource Not Found",
   "status": 422,
-  "detail": "Cannot find a Post with id '9999999999'",
+  "detail": "POST_NOT_FOUND",
   "instance": "/posts/9999999999"
 }

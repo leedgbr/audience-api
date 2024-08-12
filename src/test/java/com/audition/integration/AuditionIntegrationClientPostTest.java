@@ -80,7 +80,7 @@ class AuditionIntegrationClientPostTest {
         );
         mockServer.verify();
         assertEquals("Resource Not Found", exception.getTitle());
-        assertEquals("Cannot find a Post with id '123'", exception.getDetail());
+        assertEquals("POST_NOT_FOUND", exception.getDetail());
     }
 
     @Test

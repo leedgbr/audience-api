@@ -42,5 +42,5 @@ httpclient:
   connect-timeout-in-millis: 1000
   response-timeout-in-millis: 1000
   connection-pool:
-    max-total: 1
-    default-max-per-route: 1
+    max-total: 20
+    default-max-per-route: 20

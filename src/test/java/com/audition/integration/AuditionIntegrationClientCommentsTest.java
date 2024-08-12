@@ -92,19 +92,6 @@ class AuditionIntegrationClientCommentsTest {
     }
 
     @Test
-    void shouldGetCommentsHttpClientErrorResponse() {
-        mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
-            .andExpect(method(HttpMethod.GET))
-            .andRespond(withStatus(HttpStatus.FORBIDDEN));
-
-        final SystemException exception = assertThrows(
-            SystemException.class, () -> client.getComments(POST_ID)
-        );
-        assertEquals("Unexpected error fetching comments by id", exception.getMessage());
-        assertEquals("403 Forbidden: [no body]", exception.getCause().getMessage());
-    }
-
-    @Test
     void shouldGetCommentsErrorResponse() {
         mockServer.expect(ExpectedCount.once(), requestTo(commentsUri))
             .andExpect(method(HttpMethod.GET))
